@@ -12,10 +12,13 @@ def test_get_valid_word_returns_only_simple_words():
 
 
 def test_hangman_only_accept_letters(monkeypatch, capsys):
-    user_input = StringIO('1\n')
-    monkeypatch.setattr('sys.stdin', user_input)
+    input_list = ["1", "!", " "]
 
-    hangman()
-    captured_stdout, captured_stderr = capsys.readouterr()
-    captured_stdout = captured_stdout.strip().replace("Guess a letter: ", "")
-    assert captured_stdout == "Invalid character. Please try again."
+    for x in input_list:
+        user_input = StringIO(x + '\n')
+        monkeypatch.setattr('sys.stdin', user_input)
+
+        hangman()
+        captured_stdout, captured_stderr = capsys.readouterr()
+        captured_stdout = captured_stdout.strip().replace("Guess a letter: ", "")
+        assert captured_stdout == "Invalid character. Please try again."
