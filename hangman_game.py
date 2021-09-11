@@ -1,6 +1,7 @@
 """
 Hangman implementation by Kylie Ying
 YouTube Kylie Ying: https://www.youtube.com/watch?v=8ext9G7xspg&t=1935s
+Github: https://github.com/kying18/hangman/blob/master/hangman.py
 """
 
 import random
