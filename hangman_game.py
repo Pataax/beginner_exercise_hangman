@@ -5,8 +5,14 @@ Github: https://github.com/kying18/hangman/blob/master/hangman.py
 """
 
 import random
-import string
+import time
 from database import words
+
+
+PLAYER_LIVES = 6
+SEPARATOR = "=" * 50
+
+used_letters = set()  # what the user has already tried
 
 
 def get_valid_word(data):
@@ -16,43 +22,75 @@ def get_valid_word(data):
     return word.upper()
 
 
-def hangman():
-    word = get_valid_word(words)
-    word_letters = set(word)  # letters in the word
-    alphabet = set(string.ascii_uppercase)
-    used_letters = set()  # what the user has already tried
+def hide_word(word):
+    global used_letters
 
-    lives = 6
+    word_list = []
+    for letter in word:
+        if letter.upper() in used_letters:
+            word_list.append(letter.upper())
+        else:
+            word_list.append("_")
+    return " ".join(word_list)
+
+
+def hangman(word):
+    word_letters = set(word)  # letters in the word
+    lives = PLAYER_LIVES
 
     while len(word_letters) > 0 and lives > 0:
-        # letters used
-        # " ".join(['a', 'b', 'c']) --> 'a b c'
-        print(f"You have {lives} lives left")
-        print("You have used this letters: ", ' '.join(used_letters))
-
-        # what current word is (i.e W_RD)
-        word_list = [
-            letter if letter in used_letters else "_" for letter in word]
-        print("Current word: ", ' '.join(word_list))
+        hidden_word = hide_word(word)
+        print(f"Lives left: {lives}")
+        print(f"Current word: {hidden_word}")
+        time.sleep(1.1)
 
         user_attempt = input("Guess a letter: ").upper()
-        if user_attempt in alphabet - used_letters:
+
+        if user_attempt == "QUIT":
+            print("You choose to leave the game")
+            break
+        elif (user_attempt.isalpha()) and (user_attempt not in used_letters):
             used_letters.add(user_attempt)
             if user_attempt in word_letters:
                 word_letters.remove(user_attempt)
+                time.sleep(1.1)
             else:
                 lives = lives - 1
+                time.sleep(1.1)
                 print(f"You letter {user_attempt} is not in the word")
+                time.sleep(1.1)
         elif user_attempt in used_letters:
+            time.sleep(1.1)
             print("You have already used that letter. Try another letter.")
+            time.sleep(1.1)
         else:
+            time.sleep(1.1)
             print("Invalid character. That is not a valid letter. Please try again")
+            time.sleep(1.1)
+        print(SEPARATOR)
 
     if lives == 0:
+        time.sleep(1.1)
         print(f"You died, sorry. The word was {word}")
-    else:
+    elif len(word_letters) == 0:
+        time.sleep(1.1)
         print(f"You guessed the word {word}!")
 
 
+def start():
+    print(SEPARATOR)
+    time.sleep(1)
+    print("Hangman Game")
+    time.sleep(1.1)
+    print(f"Try to guess the word...")
+    time.sleep(1.1)
+    print(f"... or die trying. Good luck!")
+    time.sleep(2)
+    print(SEPARATOR)
+
+    chosen_word = get_valid_word(words)
+    hangman(chosen_word)
+
+
 if __name__ == "__main__":
-    hangman()
+    start()
