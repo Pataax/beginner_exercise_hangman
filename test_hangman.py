@@ -1,8 +1,5 @@
 import pytest
 import hangman_game
-import database
-import re
-from io import StringIO
 from database import words
 from hangman_game import get_valid_word, hide_word, hangman
 
